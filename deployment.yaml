@@ -14,7 +14,7 @@ spec:
         app: frontend-app
     spec:
       containers:
-        - name: backend-app
+        - name: frontend-app
           image: gcr.io/myfirstapp-72240/frontend-app:latest
           ports:
             - containerPort: 80
