@@ -98,7 +98,7 @@ const HomePage = () => {
                                         Add new users to the system quickly and easily.
                                     </Typography>
                                 </div>
-                                <Link to="/add-user" style={{ textDecoration: 'none' }}>
+                                <Link to="/user" style={{ textDecoration: 'none' }}>
                                     <Button variant="contained" color="primary">
                                         Add User
                                     </Button>
@@ -137,7 +137,7 @@ const HomePage = () => {
                                         Check out all registered users and their details in one place.
                                     </Typography>
                                 </div>
-                                <Link to="/get-users" style={{ textDecoration: 'none' }}>
+                                <Link to="/user" style={{ textDecoration: 'none' }}>
                                     <Button variant="contained" color="primary">
                                         View Users
                                     </Button>
