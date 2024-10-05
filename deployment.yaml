@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-app
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-app
+  template:
+    metadata:
+      labels:
+        app: frontend-app
+    spec:
+      containers:
+        - name: frontend-app
+          image: gcr.io/myfirstapp-72240/frontend-app:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: REACT_APP_BACKEND_URL
+              value: "127.0.0.1:5000"
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: "access_key.json"
+      imagePullSecrets:
+        - name: gcr-json-key
