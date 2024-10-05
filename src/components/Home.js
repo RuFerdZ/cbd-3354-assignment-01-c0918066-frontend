@@ -137,7 +137,7 @@ const HomePage = () => {
                                         Check out all registered users and their details in one place.
                                     </Typography>
                                 </div>
-                                <Link to="/get-users" style={{ textDecoration: 'none' }}>
+                                <Link to="/get-user" style={{ textDecoration: 'none' }}>
                                     <Button variant="contained" color="primary">
                                         View Users
                                     </Button>
