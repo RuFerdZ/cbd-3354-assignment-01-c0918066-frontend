@@ -37,6 +37,7 @@ const UserManagement = () => {
 
     const fetchUsers = async () => {
         try {
+            console.log("Backend URL:", process.env.REACT_APP_BACKEND_URL);
             const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/get-users`);
             const sortedUsers = response.data.users.sort((a, b) => a.id - b.id);
             setUsers(sortedUsers);
