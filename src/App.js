@@ -4,6 +4,7 @@ import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import Home from './components/Home';
 import UploadFile from './components/UploadFile';
 import UserManagement from './components/UserManagement';
+import Messages from './components/Messages';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme();
@@ -40,12 +41,14 @@ const App = () => {
                         <Button color="inherit" component={Link} to="/">Home</Button>
                         <Button color="inherit" component={Link} to="/upload">Upload File</Button>
                         <Button color="inherit" component={Link} to="/user">User Management</Button>
+                        <Button color="inherit" component={Link} to="/messages">Messages</Button>
                     </Toolbar>
                 </AppBar>
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/upload" element={<UploadFile />} />
                     <Route path="/user" element={<UserManagement />} />
+                    <Route path="/messages" element={<Messages />} />
                 </Routes>
             </Router>
         </ThemeProvider>
