@@ -1,32 +1,54 @@
-name: Build and Push to GCR
+name: CI/CD Pipeline for Kubernetes Deployment
 
 on:
   push:
     branches:
-      - main  # Change this to your default branch
+      - main  # Trigger workflow on pushes to the main branch
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Check out the repository
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Login to Google Container Registry
-        uses: docker/login-action@v2
+      # Step 2: Set up Google Cloud SDK
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
         with:
-          registry: gcr.io
-          username: _json_key
-          password: ${{ secrets.GCP_SA_KEY }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
-      - name: Build the Docker image
+      # Step 3: Authenticate kubectl to GKE
+      - name: Authenticate to GKE
         run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend-app:latest .
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} \
+            --zone ${{ secrets.GKE_CLUSTER_ZONE }} \
+            --project ${{ secrets.GCP_PROJECT_ID }}
 
-      - name: Push the Docker image to GCR
+      # Step 4: Build Docker image
+      - name: Build Docker image
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend-app:latest
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/backendapp:latest -f Dockerfile .
+
+      # Step 5: Push Docker image to Google Container Registry
+      - name: Push Docker image
+        run: |
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/backendapp:latest
+
+      # Step 6: Apply Kubernetes ConfigMap
+      - name: Apply ConfigMap
+        run: |
+          kubectl apply -f /mnt/data/configmap.yaml --namespace=ica4backend
+
+      # Step 7: Apply Kubernetes Deployment
+      - name: Apply Deployment
+        run: |
+          kubectl apply -f /mnt/data/deployment.yaml --namespace=ica4backend
+
+      # Step 8: Verify Deployment
+      - name: Verify Deployment
+        run: |
+          kubectl rollout status deployment backendapp --namespace=ica4backend
