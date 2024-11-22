@@ -28,21 +28,21 @@ jobs:
           install_components: kubectl
 
       # Step 4: Build Docker image
-      - name: Build Docker image
-        run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/backendapp:latest -f Dockerfile .
+      # - name: Build Docker image
+      #   run: |
+      #     docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/backendapp:latest -f Dockerfile .
 
 
       # Step 5: Push Docker image to GCR
-      - name: Debug Key Content
-        run: |
-          echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > /tmp/key.json
-          cat /tmp/key.json
+      # - name: Debug Key Content
+      #   run: |
+      #     echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > /tmp/key.json
+      #     cat /tmp/key.json
       
       - name: Authenticate Docker with GCR
         run: |
-          echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > /tmp/key.json
-          gcloud auth activate-service-account --key-file=/tmp/key.json
+          # echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > /tmp/key.json
+          # gcloud auth activate-service-account --key-file=/tmp/key.json
           gcloud auth configure-docker gcr.io
 
       - name: Push Docker image
