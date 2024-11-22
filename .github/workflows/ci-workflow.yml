@@ -30,32 +30,38 @@ jobs:
       # Step 4: Build Docker image
       - name: Build Docker image
         run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/backendapp:latest -f Dockerfile .
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontendapp:latest -f Dockerfile .
 
 
-
-      # Step 5: Push Docker image to GCR
+      # Step 5: Push Docker image to GCR      
       - name: Authenticate Docker with GCR
         run: |
-          echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > /tmp/key.json
-          gcloud auth activate-service-account --key-file=/tmp/key.json
           gcloud auth configure-docker gcr.io
 
       - name: Push Docker image
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/backendapp:latest
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontendapp:latest
 
       # Step 6: Apply Kubernetes ConfigMap
+      - name: Authenticate and Configure kubectl
+        run: |
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --zone ${{ secrets.GKE_CLUSTER_ZONE }} --project ${{ secrets.GCP_PROJECT_ID }}
+
       - name: Apply ConfigMap
         run: |
-          kubectl apply -f ./k8s/configmap.yaml --namespace=ica4backend
+          kubectl apply -f ./k8s/configmap.yaml --namespace=ica4frontend
 
       # Step 7: Apply Kubernetes Deployment
       - name: Apply Deployment
         run: |
-          kubectl apply -f ./k8s/deployment.yaml --namespace=ica4backend
+          kubectl apply -f ./k8s/deployment.yaml --namespace=ica4frontend
 
-      # Step 8: Verify Deployment
+      # Step 8: Apply Kubernetes Deployment
+      - name: Apply Deployment
+        run: |
+          kubectl apply -f ./k8s/service.yaml --namespace=ica4frontend
+
+      # Step 9: Verify Deployment
       - name: Verify Deployment
         run: |
-          kubectl rollout status deployment/backendapp --namespace=ica4backend
+          kubectl rollout status deployment/frontendapp --namespace=ica4frontend

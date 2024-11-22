@@ -1,34 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-app
+  name: frontendapp
   namespace: ica4frontend
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: frontend-app
+      app: frontendapp
   template:
     metadata:
       labels:
-        app: frontend-app
+        app: frontendapp
     spec:
       containers:
-        - name: frontend-app
-          image: gcr.io/myfirstapp-72240/frontend-app:latest
+        - name: frontendapp
+          image: gcr.io/cbd3354-435500/frontendapp:latest
           ports:
             - containerPort: 80
           env:
             - name: REACT_APP_BACKEND_URL
               valueFrom:
                 configMapKeyRef:
-                  name: frontend-app-config
+                  name: frontendapp-config
                   key: REACT_APP_BACKEND_URL
             - name: GOOGLE_APPLICATION_CREDENTIALS
               valueFrom:
                 configMapKeyRef:
-                  name: frontend-app-config
+                  name: frontendapp-config
                   key: GOOGLE_APPLICATION_CREDENTIALS
-      imagePullSecrets:
-        - name: gcr-json-key
 
