@@ -35,9 +35,11 @@ jobs:
 
 
       # Step 5: Push Docker image to GCR
-      - name: Authenticate Docker with GCR
+      - - name: Authenticate Docker with GCR
         run: |
-          echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | docker login -u _json_key --password-stdin https://gcr.io
+          echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > /tmp/key.json
+          docker login -u _json_key --password-stdin https://gcr.io < /tmp/key.json
+    
 
       - name: Push Docker image
         run: |
