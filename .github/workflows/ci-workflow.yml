@@ -52,14 +52,14 @@ jobs:
 
       - name: Apply ConfigMap
         run: |
-          kubectl apply -f ./k8s/configmap.yaml --namespace=ica4backend
+          kubectl apply -f ./k8s/configmap.yaml --namespace=ica4frontend
 
       # Step 7: Apply Kubernetes Deployment
       - name: Apply Deployment
         run: |
-          kubectl apply -f ./k8s/deployment.yaml --namespace=ica4backend
+          kubectl apply -f ./k8s/deployment.yaml --namespace=ica4frontend
 
       # Step 8: Verify Deployment
       - name: Verify Deployment
         run: |
-          kubectl rollout status deployment/backendapp --namespace=ica4backend
+          kubectl rollout status deployment/backendapp --namespace=ica4frontend
