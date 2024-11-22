@@ -33,14 +33,13 @@ jobs:
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/backendapp:latest -f Dockerfile .
 
 
-
       # Step 5: Push Docker image to GCR
       - name: Authenticate Docker with GCR
         run: |
           echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > /tmp/key.json
           gcloud auth activate-service-account --key-file=/tmp/key.json
           gcloud auth configure-docker gcr.io
-          
+
 
       - name: Push Docker image
         run: |
