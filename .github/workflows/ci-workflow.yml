@@ -46,6 +46,10 @@ jobs:
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/backendapp:latest
 
       # Step 6: Apply Kubernetes ConfigMap
+      - name: Authenticate and Configure kubectl
+        run: |
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --zone ${{ secrets.GKE_CLUSTER_ZONE }} --project ${{ secrets.GCP_PROJECT_ID }}
+
       - name: Apply ConfigMap
         run: |
           kubectl apply -f ./k8s/configmap.yaml --namespace=ica4backend
