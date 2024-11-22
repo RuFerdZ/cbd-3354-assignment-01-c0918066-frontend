@@ -1,4 +1,4 @@
-name: CI/CD Pipeline Kubernetes Deployment
+name: CI/CD Pipeline for Kubernetes Deployment
 
 on:
   push:
