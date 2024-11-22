@@ -14,7 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Authenticate with Google Cloud
+      # Step 2: Authenticate to Google Cloud
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
@@ -27,18 +27,27 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           install_components: kubectl
 
-      # Step 4: Authenticate kubectl to GKE
-      - name: Authenticate kubectl
+      # Step 4: Build Docker image
+      - name: Build Docker image
         run: |
-          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} \
-            --zone ${{ secrets.GKE_CLUSTER_ZONE }} \
-            --project ${{ secrets.GCP_PROJECT_ID }}
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/backendapp:latest -f Dockerfile .
 
-      # Step 5: Apply Kubernetes manifests
-      - name: Apply Kubernetes ConfigMap
+      # Step 5: Push Docker image to GCR
+      - name: Push Docker image
         run: |
-          kubectl apply -f ./k8s/configmap.yaml --namespace=ica4frontend
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/backendapp:latest
 
-      - name: Apply Kubernetes Deployment
+      # Step 6: Apply Kubernetes ConfigMap
+      - name: Apply ConfigMap
         run: |
-          kubectl apply -f ./k8s/deployment.yaml --namespace=ica4frontend
+          kubectl apply -f ./k8s/configmap.yaml --namespace=ica4backend
+
+      # Step 7: Apply Kubernetes Deployment
+      - name: Apply Deployment
+        run: |
+          kubectl apply -f ./k8s/deployment.yaml --namespace=ica4backend
+
+      # Step 8: Verify Deployment
+      - name: Verify Deployment
+        run: |
+          kubectl rollout status deployment/backendapp --namespace=ica4backend
