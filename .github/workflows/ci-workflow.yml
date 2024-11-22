@@ -35,15 +35,15 @@ jobs:
 
 
       # Step 5: Push Docker image to GCR
-      - name: Authenticate Docker with GCR
-        run: |
-          echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > /tmp/key.json
-          docker login -u _json_key --password-stdin https://gcr.io < /tmp/key.json
+      # - name: Authenticate Docker with GCR
+      #   run: |
+      #     echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > /tmp/key.json
+      #     docker login -u _json_key --password-stdin https://gcr.io < /tmp/key.json
     
 
       - name: Push Docker image
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/backendapp:latest
+          docker push gcr.io/cbd3354-435500/backendapp:latest
 
       # Step 6: Apply Kubernetes ConfigMap
       - name: Apply ConfigMap
