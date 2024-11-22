@@ -30,7 +30,7 @@ jobs:
       # Step 4: Build Docker image
       - name: Build Docker image
         run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontdapp:latest -f Dockerfile .
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontendapp:latest -f Dockerfile .
 
 
       # Step 5: Push Docker image to GCR      
