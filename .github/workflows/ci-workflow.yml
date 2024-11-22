@@ -37,8 +37,8 @@ jobs:
       # Step 5: Apply Kubernetes manifests
       - name: Apply Kubernetes ConfigMap
         run: |
-          kubectl apply -f ./k8s/configmap.yaml --namespace=ica4backend
+          kubectl apply -f ./k8s/configmap.yaml --namespace=ica4frontend
 
       - name: Apply Kubernetes Deployment
         run: |
-          kubectl apply -f ./k8s/deployment.yaml --namespace=ica4backend
+          kubectl apply -f ./k8s/deployment.yaml --namespace=ica4frontend
