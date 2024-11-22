@@ -14,41 +14,31 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Google Cloud SDK
+      # Step 2: Authenticate with Google Cloud
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      # Step 3: Set up Google Cloud SDK
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          install_components: kubectl
 
-      # Step 3: Authenticate kubectl to GKE
-      - name: Authenticate to GKE
+      # Step 4: Authenticate kubectl to GKE
+      - name: Authenticate kubectl
         run: |
           gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} \
             --zone ${{ secrets.GKE_CLUSTER_ZONE }} \
             --project ${{ secrets.GCP_PROJECT_ID }}
 
-      # Step 4: Build Docker image
-      - name: Build Docker image
-        run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/backendapp:latest -f Dockerfile .
-
-      # Step 5: Push Docker image to Google Container Registry
-      - name: Push Docker image
-        run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/backendapp:latest
-
-      # Step 6: Apply Kubernetes ConfigMap
-      - name: Apply ConfigMap
+      # Step 5: Apply Kubernetes manifests
+      - name: Apply Kubernetes ConfigMap
         run: |
           kubectl apply -f /mnt/data/configmap.yaml --namespace=ica4backend
 
-      # Step 7: Apply Kubernetes Deployment
-      - name: Apply Deployment
+      - name: Apply Kubernetes Deployment
         run: |
           kubectl apply -f /mnt/data/deployment.yaml --namespace=ica4backend
-
-      # Step 8: Verify Deployment
-      - name: Verify Deployment
-        run: |
-          kubectl rollout status deployment backendapp --namespace=ica4backend
