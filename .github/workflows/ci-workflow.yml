@@ -34,12 +34,16 @@ jobs:
 
 
       # Step 5: Push Docker image to GCR
+      - name: Debug Key Content
+        run: |
+          echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > /tmp/key.json
+          cat /tmp/key.json
+      
       - name: Authenticate Docker with GCR
         run: |
           echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > /tmp/key.json
           gcloud auth activate-service-account --key-file=/tmp/key.json
           gcloud auth configure-docker gcr.io
-
 
       - name: Push Docker image
         run: |
