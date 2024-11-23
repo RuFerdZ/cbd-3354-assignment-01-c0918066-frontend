@@ -11,7 +11,7 @@ metadata:
   name: ica4-frontend-configmap
   namespace: ica4-frontend
 data:
-  REACT_APP_BACKEND_URL: "http://backend-service.backend.svc.cluster.local"
+  REACT_APP_BACKEND_URL: "http://ica4-backend-service.ica4-backend.svc.cluster.local"
 
 ---
 
