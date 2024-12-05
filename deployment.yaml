@@ -11,7 +11,7 @@ metadata:
   name: assignment-02-frontend-configmap
   namespace: assignment-02-frontend
 data:
-  REACT_APP_BACKEND_URL: "get the external ip address of the backend"
+  REACT_APP_BACKEND_URL: "http://34.130.140.131"
 
 ---
 
