@@ -1,43 +1,43 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: ica4-frontend
+  name: assignment-02-frontend
 
 ---
 
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ica4-frontend-configmap
-  namespace: ica4-frontend
+  name: assignment-02-frontend-configmap
+  namespace: assignment-02-frontend
 data:
-  REACT_APP_BACKEND_URL: "http://ica4-backend-service.ica4-backend.svc.cluster.local"
+  REACT_APP_BACKEND_URL: "get the external ip address of the backend"
 
 ---
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ica4-frontend-deployment
-  namespace: ica4-frontend
+  name: assignment-02-frontend-deployment
+  namespace: assignment-02-frontend
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: ica4-frontend-app
+      app: assignment-02-frontend-app
   template:
     metadata:
       labels:
-        app: ica4-frontend-app
+        app: assignment-02-frontend-app
     spec:
       containers:
-        - name: ica4-frontend
-          image: gcr.io/myfirstapp-72240/ica4-frontend:latest
+        - name: assignment-02-frontend
+          image: gcr.io/myfirstapp-72240/assignment-02-frontend:latest
           ports:
             - containerPort: 80
           envFrom:
             - configMapRef:
-                name: ica4-frontend-configmap
+                name: assignment-02-frontend-configmap
       imagePullSecrets:
         - name: gcr-json-key
 
@@ -46,12 +46,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ica4-frontend-service
-  namespace: ica4-frontend
+  name: assignment-02-frontend-service
+  namespace: assignment-02-frontend
 spec:
   type: LoadBalancer
   selector:
-    app: ica4-frontend-app
+    app: assignment-02-frontend-app
   ports:
     - protocol: TCP
       port: 80
